@@ -42,7 +42,7 @@
  // WiFi credentials
  const char* ssid = "SETUP-2F8A";
  const char* password = "fifty4884almost";
- const char* serverAddress = "3.138.34.177"; // AWS server address
+ const char* serverAddress = "3.149.29.253"; // AWS server address
  const int serverPort = 5000;
  
  // Instantiate objects
@@ -188,66 +188,80 @@
  
  // Send alert data to cloud server
  void sendAlertToCloud(int level, float accel, int distance, int light) {
-   if (WiFi.status() == WL_CONNECTED) {
-     WiFiClient client;
-     HttpClient http(client);
-     
-     // Create the query parameters
-     String path = "/alert?level=" + String(level) +
-                  "&accel=" + String(accel) +
-                  "&distance=" + String(distance) +
-                  "&light=" + String(light);
-                  
-     Serial.print("Sending alert to: ");
-     Serial.println(path);
-     
-     // Send the request - HttpClient has a different API
-     http.get(serverAddress, serverPort, path.c_str());
-     
-     // Check the response
-     int statusCode = http.responseStatusCode();
-     
-     if (statusCode > 0) {
-       Serial.println("HTTP Response code: " + String(statusCode));
-       
-       // Read the response body directly - HttpClient doesn't have a responseBody() method
-       while (client.available()) {
-         String line = client.readStringUntil('\r');
-         Serial.print(line);
-       }
-       
-       // Display success message
-       tft.fillRect(20, 180, 200, 20, TFT_BACKGROUND);
-       if (level == 3) {
-         tft.setTextColor(TFT_WARNING);
-         tft.setCursor(20, 180);
-         tft.println("Alert Sent!");
-       } else {
-         tft.setTextColor(TFT_HIGHLIGHT);
-         tft.setCursor(20, 180);
-         tft.println("Event Logged");
-       }
-     } else {
-       Serial.print("Error code: ");
-       Serial.println(statusCode);
-       
-       tft.fillRect(20, 180, 200, 20, TFT_BACKGROUND);
-       tft.setTextColor(TFT_WARNING);
-       tft.setCursor(20, 180);
-       tft.println("Send Failed");
-     }
-     
-     // Free resources
-     http.stop();
-   } else {
-     Serial.println("WiFi not connected. Cannot send alert.");
-     
-     tft.fillRect(20, 180, 200, 20, TFT_BACKGROUND);
-     tft.setTextColor(TFT_WARNING);
-     tft.setCursor(20, 180);
-     tft.println("WiFi Error");
-   }
- }
+  if (WiFi.status() == WL_CONNECTED) {
+    WiFiClient client;
+    HttpClient http(client);
+    
+    // Create the query parameters
+    String path = "/alert?level=" + String(level) +
+                 "&accel=" + String(accel) +
+                 "&distance=" + String(distance) +
+                 "&light=" + String(light);
+                 
+    Serial.print("Sending alert to: ");
+    Serial.println(path);
+    
+    // Send the request - using the correct API for your HttpClient library
+    int err = http.get(serverAddress, serverPort, path.c_str());
+    
+    if (err == 0) {
+      // Check the response
+      int statusCode = http.responseStatusCode();
+      
+      Serial.print("HTTP Status code: ");
+      Serial.println(statusCode);
+      
+      // Read the response body directly from the client
+      String response = "";
+      while (client.available()) {
+        response += (char)client.read();
+      }
+      
+      Serial.print("Response: ");
+      Serial.println(response);
+      
+      // Display success message
+      tft.fillRect(20, 180, 200, 20, TFT_BACKGROUND);
+      if (statusCode > 0) {
+        if (level == 3) {
+          tft.setTextColor(TFT_WARNING);
+          tft.setCursor(20, 180);
+          tft.println("Alert Sent!");
+        } else {
+          tft.setTextColor(TFT_HIGHLIGHT);
+          tft.setCursor(20, 180);
+          tft.println("Event Logged");
+        }
+      } else {
+        Serial.print("Error code: ");
+        Serial.println(statusCode);
+        
+        tft.fillRect(20, 180, 200, 20, TFT_BACKGROUND);
+        tft.setTextColor(TFT_WARNING);
+        tft.setCursor(20, 180);
+        tft.println("Send Failed");
+      }
+    } else {
+      Serial.print("HTTP Request failed, error: ");
+      Serial.println(err);
+      
+      tft.fillRect(20, 180, 200, 20, TFT_BACKGROUND);
+      tft.setTextColor(TFT_WARNING);
+      tft.setCursor(20, 180);
+      tft.println("HTTP Error");
+    }
+    
+    // Free resources
+    http.stop();
+  } else {
+    Serial.println("WiFi not connected. Cannot send alert.");
+    
+    tft.fillRect(20, 180, 200, 20, TFT_BACKGROUND);
+    tft.setTextColor(TFT_WARNING);
+    tft.setCursor(20, 180);
+    tft.println("WiFi Error");
+  }
+}
  
  // Control buzzer for alarm
  void controlBuzzer(bool enabled, int level) {
