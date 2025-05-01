@@ -1,4 +1,4 @@
-# CS-596-IOT-FINALPROJECT
+# CS-596-IOT-FINAL-PROJECT
  * Genesis Anne Villar (RED ID: 824435476)
  * Steven Gervacio (RedID: 825656527)
  * CS 596 IOT - Prof. Donyanavard
