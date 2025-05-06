@@ -18,7 +18,7 @@ Semester: **Spring 2025**
 
 **Door the Explorer** is an affordable, intelligent IoT-based security solution designed to detect unauthorized door access and provide real-time alerts and insightful analytics. Motivated by personal experiences with shared living spaces and the high cost of traditional security systems, our project offers a practical, cost-friendly alternative using advanced sensor fusion and cloud-based analytics.
 
-Full Project Report: [Download PDF](CS-596-IOT-FINALPROJECT/Final_Report_CS596_IOT_VILLAR_GERVACIO.pdf)
+Full Project Report: [Download PDF](Final_Report_CS596_IOT_VILLAR_GERVACIO.pdf)
 
 ---
 
