@@ -73,7 +73,7 @@ Our system follows a sophisticated multi-layered architecture:
 
 A top-down view of the circuit diagram is provided below:
 
-![Circuit Diagram](CS-596-IOT-FINALPROJECT/top_down.jpg)
+![Circuit Diagram](top_down.jpg)
 
 ### Pin Connections:
 
@@ -113,7 +113,7 @@ A top-down view of the circuit diagram is provided below:
 
 Complete documentation can be accessed here:
 
-[📄 Final Project Report (PDF)](CS-596-IOT-FINALPROJECT/Final_Report_CS596_IOT_VILLAR_GERVACIO.pdf)
+[📄 Final Project Report (PDF)](Final_Report_CS596_IOT_VILLAR_GERVACIO.pdf)
 
 ---
 
